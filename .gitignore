@@ -1,0 +1,9 @@
+# -*- mode: gitignore; -*-
+.\#*
+*~
+\#*\#
+/**/build
+.DS_Store
+/tmp
+/dist
+/build
