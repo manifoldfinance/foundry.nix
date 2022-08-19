@@ -7,8 +7,8 @@ set -euo pipefail
 GITHUB_API_URL="https://api.github.com/repos/foundry-rs/foundry/releases"
 
 latest_release_json="$(curl -s "$GITHUB_API_URL" | jq .[0])"
-tag_name="$(echo $latest_release_json | jq -r .tag_name)"
-timestamp="$(echo $latest_release_json | jq -r .created_at)"
+tag_name="$(echo "$latest_release_json" | jq -r .tag_name)"
+timestamp="$(echo "$latest_release_json" | jq -r .created_at)"
 
 get_url() {
     declare arch="$1"
@@ -17,14 +17,13 @@ get_url() {
 
 get_hash() {
     declare arch="$1"
-    nix-prefetch-url --unpack --type sha256 "$(get_url $arch)"
+    nix-prefetch-url --unpack --type sha256 "$(get_url "$arch")"
 }
 
 cat > releases.nix << EOF
 {
   version = "0.0.0";
   timestamp = "${timestamp}";
-
   sources = {
     "x86_64-linux" = {
       url = "$(get_url linux_amd64)";
